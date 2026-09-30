@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <meta name="description" content="A simple, thoughtful place to keep track of what matters today.">
+  <title>My Todo List</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="page-shell">
+    <section class="todo-card" aria-labelledby="page-title">
+      <header class="app-header">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><rect x="3" y="3" width="26" height="26" rx="9" fill="currentColor"/><path d="m10 16.2 4 4L22.5 12" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="eyebrow">A little more focus</span>
+        <h1 id="page-title">My Todo List</h1>
+        <p class="subtitle">Make room for what matters today.</p>
+      </header>
+
+      <form class="add-form" id="add-form" autocomplete="off">
+        <label class="visually-hidden" for="task-input">Add a task</label>
+        <input id="task-input" name="task" type="text" maxlength="180" placeholder="What needs to get done?" aria-describedby="form-message" required>
+        <button class="add-button" type="submit" aria-label="Add task">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </form>
+      <p class="form-message" id="form-message" aria-live="polite"></p>
+
+      <div class="list-toolbar">
+        <div class="filters" role="group" aria-label="Filter tasks">
+          <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-button" type="button" data-filter="active" aria-pressed="false">Active</button>
+          <button class="filter-button" type="button" data-filter="completed" aria-pressed="false">Completed</button>
+        </div>
+        <span class="task-count" id="task-count" aria-live="polite">0 tasks left</span>
+      </div>
+
+      <ul class="task-list" id="task-list" aria-label="Tasks"></ul>
+      <div class="empty-state" id="empty-state">
+        <div class="empty-illustration" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none"><rect x="13" y="10" width="38" height="46" rx="8" fill="#EEF2FF"/><path d="M23 24h18M23 33h18M23 42h10" stroke="#8894B8" stroke-width="3" stroke-linecap="round"/><circle cx="47" cy="45" r="10" fill="#DCE5FF"/><path d="m43 45 2.5 2.5L51 42" stroke="#5268CC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <p class="empty-title" id="empty-title">A clear start</p>
+        <p class="empty-copy" id="empty-copy">Your list is quiet. Add a task to get going.</p>
+      </div>
+
+      <footer class="list-footer">
+        <span class="footer-note"><span class="status-dot" aria-hidden="true"></span> Saved on this device</span>
+        <button class="clear-button" id="clear-completed" type="button" disabled>Clear completed</button>
+      </footer>
+    </section>
+    <p class="page-footnote">Small steps add up.</p>
+  </main>
+</body>
+</html>
