@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f7fb">
-  <meta name="description" content="A simple, thoughtful place to keep track of what matters today.">
-  <title>My Todo List</title>
+  <meta name="theme-color" content="#f4f6fb">
+  <meta name="description" content="A focused space for tasks, notes, and everyday progress.">
+  <title>Focus — My Productivity Space</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -13,50 +13,88 @@
   <script src="script.js" defer></script>
 </head>
 <body>
-  <main class="page-shell">
-    <section class="todo-card" aria-labelledby="page-title">
-      <header class="app-header">
-        <div class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 32 32" fill="none"><rect x="3" y="3" width="26" height="26" rx="9" fill="currentColor"/><path d="m10 16.2 4 4L22.5 12" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#dashboard" aria-label="Focus home"><span class="brand-icon" aria-hidden="true">✳</span><span>focus<span class="brand-dot">.</span></span></a>
+      <p class="nav-label">Workspace</p>
+      <nav class="main-nav">
+        <button class="nav-link is-current" type="button" data-view="dashboard"><span class="nav-icon">▦</span>Overview</button>
+        <button class="nav-link" type="button" data-view="tasks"><span class="nav-icon">☷</span>My tasks<span class="nav-badge" id="nav-active-count">0</span></button>
+        <button class="nav-link" type="button" data-view="notes"><span class="nav-icon">▤</span>Sticky notes</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-tip"><span class="tip-spark">✦</span><strong>One thing at a time.</strong><p>Progress is built from small, steady steps.</p></div>
+        <span class="local-label"><span class="status-dot"></span> Private on this device</span>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-icon">✳</span> focus<span class="brand-dot">.</span></div>
+        <div class="breadcrumb" id="breadcrumb">Workspace <span>/</span> Overview</div>
+        <div class="top-actions">
+          <label class="global-search"><span aria-hidden="true">⌕</span><span class="visually-hidden">Search tasks and notes</span><input id="global-search" type="search" placeholder="Search anything…" autocomplete="off"><kbd>S</kbd></label>
+          <button class="icon-control theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Toggle dark mode">◐</button>
+          <button class="avatar" type="button" aria-label="Personal workspace">U</button>
         </div>
-        <span class="eyebrow">A little more focus</span>
-        <h1 id="page-title">My Todo List</h1>
-        <p class="subtitle">Make room for what matters today.</p>
       </header>
+      <nav class="mobile-nav" aria-label="Workspace views">
+        <button class="nav-link is-current" type="button" data-view="dashboard">Overview</button>
+        <button class="nav-link" type="button" data-view="tasks">Tasks</button>
+        <button class="nav-link" type="button" data-view="notes">Notes</button>
+        <button class="nav-link" type="button" data-view="settings">Data</button>
+      </nav>
 
-      <form class="add-form" id="add-form" autocomplete="off">
-        <label class="visually-hidden" for="task-input">Add a task</label>
-        <input id="task-input" name="task" type="text" maxlength="180" placeholder="What needs to get done?" aria-describedby="form-message" required>
-        <button class="add-button" type="submit" aria-label="Add task">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-        </button>
-      </form>
-      <p class="form-message" id="form-message" aria-live="polite"></p>
+      <div class="content-wrap">
+        <section class="view-panel" id="dashboard-view" data-panel="dashboard">
+          <div class="page-heading"><div><p class="eyebrow" id="today-label">YOUR PERSONAL WORKSPACE</p><h1>Good things take focus.</h1><p class="heading-copy">Here’s a look at your progress and what’s ahead.</p></div><button class="primary-button" id="dashboard-add" type="button"><span>＋</span> New task</button></div>
+          <div class="stats-grid" aria-label="Productivity statistics">
+            <article class="stat-card"><span class="stat-icon indigo">☷</span><span class="stat-label">Total tasks</span><strong id="stat-total">0</strong><span class="stat-foot">Across your workspace</span></article>
+            <article class="stat-card"><span class="stat-icon green">✓</span><span class="stat-label">Completed</span><strong id="stat-completed">0</strong><span class="stat-foot">Tasks checked off</span></article>
+            <article class="stat-card"><span class="stat-icon amber">◷</span><span class="stat-label">In progress</span><strong id="stat-active">0</strong><span class="stat-foot">Still on your list</span></article>
+            <article class="stat-card"><span class="stat-icon rose">⚑</span><span class="stat-label">Overdue</span><strong id="stat-overdue">0</strong><span class="stat-foot">Past due and unfinished</span></article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="panel progress-panel"><div class="panel-heading"><div><h2>Weekly progress</h2><p>Tasks completed over the last 7 days</p></div><span class="panel-chip" id="week-total">0 this week</span></div><div class="chart" id="weekly-chart" role="img" aria-label="Weekly completed tasks chart"></div><div class="completion-row"><div><span class="muted-label">Overall completion</span><strong id="completion-label">0%</strong></div><div class="progress-track"><span id="completion-bar"></span></div></div></article>
+            <article class="panel streak-panel"><div class="panel-heading"><div><h2>Your rhythm</h2><p>Consistency, one day at a time</p></div><span class="streak-flame">♨</span></div><div class="streak-number"><strong id="streak-count">0</strong><span>day streak</span></div><p class="streak-caption" id="streak-caption">Complete a task today to start a streak.</p><div class="today-summary"><span>Completed today</span><strong id="completed-today">0</strong></div></article>
+          </div>
+          <div class="dashboard-bottom">
+            <article class="panel preview-panel"><div class="panel-heading"><div><h2>Coming up</h2><p>Today’s and upcoming tasks</p></div><button class="text-button" type="button" data-go="tasks">View all <span>→</span></button></div><div id="upcoming-list" class="upcoming-list"></div></article>
+            <article class="panel quick-note-panel"><div class="panel-heading"><div><h2>Quick capture</h2><p>Save a thought before it slips away</p></div><span class="note-glyph">✎</span></div><textarea id="quick-note" rows="3" placeholder="Jot down an idea…" aria-label="Quick note content"></textarea><div class="quick-note-footer"><span>Saved as a sticky note</span><button class="small-primary" id="save-quick-note" type="button">Save note</button></div></article>
+          </div>
+        </section>
 
-      <div class="list-toolbar">
-        <div class="filters" role="group" aria-label="Filter tasks">
-          <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All</button>
-          <button class="filter-button" type="button" data-filter="active" aria-pressed="false">Active</button>
-          <button class="filter-button" type="button" data-filter="completed" aria-pressed="false">Completed</button>
-        </div>
-        <span class="task-count" id="task-count" aria-live="polite">0 tasks left</span>
+        <section class="view-panel" id="tasks-view" data-panel="tasks" hidden>
+          <div class="page-heading"><div><p class="eyebrow">MAKE SPACE FOR WHAT MATTERS</p><h1>My tasks</h1><p class="heading-copy">Plan your day, then take it one task at a time.</p></div><button class="primary-button" id="new-task" type="button"><span>＋</span> New task</button></div>
+          <form class="task-composer" id="task-form"><label class="visually-hidden" for="task-title">Task title</label><span class="composer-plus" aria-hidden="true">＋</span><input id="task-title" name="title" maxlength="180" placeholder="Add a task and press Enter…" required><button type="submit" class="composer-submit">Add task</button></form>
+          <div class="task-controls"><div class="filters" role="group" aria-label="Filter by completion"><button type="button" class="filter-button is-active" data-filter="all" aria-pressed="true">All <span id="filter-all-count">0</span></button><button type="button" class="filter-button" data-filter="active" aria-pressed="false">Active <span id="filter-active-count">0</span></button><button type="button" class="filter-button" data-filter="completed" aria-pressed="false">Completed <span id="filter-completed-count">0</span></button></div><div class="control-selects"><label><span class="visually-hidden">Filter by priority</span><select id="priority-filter"><option value="all">All priorities</option><option value="high">High priority</option><option value="medium">Medium priority</option><option value="low">Low priority</option></select></label><label><span class="visually-hidden">Filter by category</span><select id="category-filter"><option value="all">All categories</option></select></label><label><span class="visually-hidden">Sort tasks</span><select id="sort-tasks"><option value="manual">Custom order</option><option value="due">Due date</option><option value="priority">Priority</option><option value="created">Date added</option></select></label><div class="view-switch" role="group" aria-label="Task view"><button class="view-switch-button is-selected" id="list-view-button" type="button" aria-pressed="true">☷<span class="visually-hidden">List view</span></button><button class="view-switch-button" id="kanban-view-button" type="button" aria-pressed="false">▦<span class="visually-hidden">Kanban view</span></button></div></div></div>
+          <p class="search-status" id="search-status" aria-live="polite"></p>
+          <div id="list-view" class="task-list-view"><ul id="task-list" class="task-list" aria-label="Tasks"></ul><div class="empty-state" id="task-empty"><div class="empty-illustration" aria-hidden="true">☼</div><h2 id="task-empty-title">A clear start</h2><p id="task-empty-copy">Your list is quiet. Add a task to get going.</p></div></div>
+          <div id="kanban-view" class="kanban" hidden><section class="kanban-column" data-status="todo"><header><h2>To do</h2><span class="column-count">0</span></header><div class="kanban-dropzone" data-status="todo"></div></section><section class="kanban-column" data-status="progress"><header><h2>In progress</h2><span class="column-count">0</span></header><div class="kanban-dropzone" data-status="progress"></div></section><section class="kanban-column" data-status="completed"><header><h2>Completed</h2><span class="column-count">0</span></header><div class="kanban-dropzone" data-status="completed"></div></section></div>
+          <div class="task-footer"><span id="task-summary">0 tasks left</span><button class="text-button danger-text" id="clear-completed" type="button" disabled>Clear completed</button></div>
+        </section>
+
+        <section class="view-panel" id="notes-view" data-panel="notes" hidden>
+          <div class="page-heading"><div><p class="eyebrow">IDEAS, THOUGHTS & REMINDERS</p><h1>Sticky notes</h1><p class="heading-copy">Keep the little things somewhere you can see them.</p></div><button class="primary-button" id="new-note" type="button"><span>＋</span> New note</button></div>
+          <div class="notes-toolbar"><span id="note-count-label">0 notes</span><span class="notes-hint">Drag notes to arrange your space</span></div>
+          <div class="notes-grid" id="notes-grid"></div>
+          <div class="empty-state notes-empty" id="notes-empty"><div class="empty-illustration">▤</div><h2>A place for your thoughts</h2><p>Create a sticky note to capture an idea, reminder, or passing thought.</p><button class="text-button" type="button" data-action="new-note">Create your first note →</button></div>
+        </section>
+
+        <section class="view-panel" id="settings-view" data-panel="settings" hidden>
+          <div class="page-heading"><div><p class="eyebrow">YOUR WORKSPACE, YOUR WAY</p><h1>Settings & data</h1><p class="heading-copy">Manage your appearance, reminders, and backups.</p></div></div>
+          <div class="settings-grid"><article class="panel settings-card"><span class="setting-icon">◐</span><h2>Appearance</h2><p>Choose a comfortable display for your workspace.</p><label class="setting-row"><span><strong>Dark mode</strong><small>Use a darker color palette</small></span><input id="dark-mode-setting" class="toggle-input" type="checkbox" aria-label="Enable dark mode"><span class="toggle-ui"></span></label></article><article class="panel settings-card"><span class="setting-icon">♧</span><h2>Due date reminders</h2><p>Get a browser notification when a task is due. Requires notification permission.</p><label class="setting-row"><span><strong>Enable reminders</strong><small id="reminder-status">Off</small></span><input id="reminder-setting" class="toggle-input" type="checkbox" aria-label="Enable browser reminders"><span class="toggle-ui"></span></label></article><article class="panel settings-card"><span class="setting-icon">⇅</span><h2>Backup your workspace</h2><p>Export tasks, notes, and preferences or restore from a backup file.</p><div class="data-actions"><button id="export-data" class="secondary-button" type="button">↓ Export backup</button><button id="import-data" class="secondary-button" type="button">↑ Import backup</button><input id="import-file" type="file" accept="application/json,.json" hidden></div></article><article class="panel settings-card"><span class="setting-icon">⌨</span><h2>Keyboard shortcuts</h2><p>Quick actions when you are not typing in a text field.</p><div class="shortcut-row"><span>New task</span><kbd>N</kbd></div><div class="shortcut-row"><span>Focus search</span><kbd>S</kbd></div><div class="shortcut-row"><span>Toggle dark mode</span><kbd>D</kbd></div><div class="shortcut-row"><span>Close dialog</span><kbd>Esc</kbd></div></article></div>
+        </section>
       </div>
 
-      <ul class="task-list" id="task-list" aria-label="Tasks"></ul>
-      <div class="empty-state" id="empty-state">
-        <div class="empty-illustration" aria-hidden="true">
-          <svg viewBox="0 0 64 64" fill="none"><rect x="13" y="10" width="38" height="46" rx="8" fill="#EEF2FF"/><path d="M23 24h18M23 33h18M23 42h10" stroke="#8894B8" stroke-width="3" stroke-linecap="round"/><circle cx="47" cy="45" r="10" fill="#DCE5FF"/><path d="m43 45 2.5 2.5L51 42" stroke="#5268CC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <p class="empty-title" id="empty-title">A clear start</p>
-        <p class="empty-copy" id="empty-copy">Your list is quiet. Add a task to get going.</p>
-      </div>
+      <footer class="app-footer"><span>Focus on what matters.</span><button class="footer-settings" type="button" data-go="settings">Settings & data</button><span class="footer-separator">·</span><span>Saved locally</span></footer>
+    </main>
+  </div>
 
-      <footer class="list-footer">
-        <span class="footer-note"><span class="status-dot" aria-hidden="true"></span> Saved on this device</span>
-        <button class="clear-button" id="clear-completed" type="button" disabled>Clear completed</button>
-      </footer>
-    </section>
-    <p class="page-footnote">Small steps add up.</p>
-  </main>
+  <dialog id="task-dialog" class="app-dialog"><form id="task-detail-form" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">TASK DETAILS</p><h2 id="task-dialog-heading">Create a task</h2></div><button class="dialog-close" type="button" data-close aria-label="Close dialog">×</button></div><input type="hidden" id="edit-task-id"><label class="field-label" for="detail-title">Task name</label><input class="form-field" id="detail-title" maxlength="180" required placeholder="Give it a clear name"><label class="field-label" for="detail-description">Description <span>optional</span></label><textarea class="form-field" id="detail-description" rows="3" maxlength="1200" placeholder="Add a few details…"></textarea><div class="field-grid"><div><label class="field-label" for="detail-priority">Priority</label><select class="form-field" id="detail-priority"><option value="medium">Medium</option><option value="high">High</option><option value="low">Low</option></select></div><div><label class="field-label" for="detail-due">Due date</label><input class="form-field" id="detail-due" type="date"></div></div><label class="field-label" for="detail-category">Category <span>optional</span></label><input class="form-field" id="detail-category" maxlength="36" placeholder="e.g. Work, Personal"><label class="field-label" for="detail-status">Status</label><select class="form-field" id="detail-status"><option value="todo">To do</option><option value="progress">In progress</option><option value="completed">Completed</option></select><div class="dialog-actions"><button class="secondary-button" type="button" data-close>Cancel</button><button class="primary-button" type="submit">Save task</button></div></form></dialog>
+
+  <dialog id="note-dialog" class="app-dialog note-dialog"><form id="note-detail-form" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">STICKY NOTE</p><h2 id="note-dialog-heading">Create a note</h2></div><button class="dialog-close" type="button" data-close aria-label="Close dialog">×</button></div><input type="hidden" id="edit-note-id"><label class="field-label" for="note-title">Title</label><input class="form-field" id="note-title" maxlength="100" placeholder="A little reminder"><label class="field-label" for="note-content">Your note</label><textarea class="form-field" id="note-content" rows="6" maxlength="2000" placeholder="Write your thoughts here…"></textarea><label class="field-label" for="note-color">Note color</label><select class="form-field" id="note-color"><option value="yellow">Sunshine</option><option value="pink">Blush</option><option value="blue">Sky</option><option value="green">Sage</option><option value="lavender">Lavender</option></select><label class="check-row"><input type="checkbox" id="note-pinned"> Pin this note</label><div class="dialog-actions"><button class="secondary-button" type="button" data-close>Cancel</button><button class="primary-button" type="submit">Save note</button></div></form></dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
